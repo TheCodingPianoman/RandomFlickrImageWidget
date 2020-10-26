@@ -1,15 +1,17 @@
-//Insert your Flickr API key here
+// Insert your Flickr API key here
 const apiKey = ''
-//Insert the ID of the user you want to load pictures from here
+// Insert the ID of the user you want to load pictures from here
 const userId = ''
-
-//URL prototype to use for loading a list of photos from the photoset with given ID
-const getPhotosUrl = (photosetId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1`
-//URL prototype to use for loading the list of available photosets
-const getPhotosetsUrl = `https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=${apiKey}&user_id=${userId}&format=json&nojsoncallback=1`
-//Imagesize suffix. Find a list of valid suffixes: https://www.flickr.com/services/api/misc.urls.html
+// Refresh interval in hours
+const refreshInterval = 6
+// Imagesize suffix. Find a list of valid suffixes: https://www.flickr.com/services/api/misc.urls.html
 const sizeIndicator = 'b'
-//URL prototype to use for loading the image
+
+// URL prototype to use for loading a list of photos from the photoset with given ID
+const getPhotosUrl = (photosetId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1`
+// URL prototype to use for loading the list of available photosets
+const getPhotosetsUrl = `https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=${apiKey}&user_id=${userId}&format=json&nojsoncallback=1`
+// URL prototype to use for loading the image
 const imgUrlPrototype = (server, id, secret, size) => `https://live.staticflickr.com/${server}/${id}_${secret}_${size}.jpg`
 
 
@@ -35,18 +37,21 @@ async function createWidget(items)
 	widget.backgroundImage = selection.image
 	widget.addSpacer()
 	
-	let startColor = new Color("#1c1c1c19")
+	let startColor = new Color("#1c1c1c00")
 	let endColor = new Color("#1c1c1cb4")
 	let gradient = new LinearGradient()
 	gradient.colors = [startColor, endColor]
-	gradient.locations = [0.0, 1]
+	gradient.locations = [0.25, 1]
 	widget.backgroundGradient = gradient
 	widget.backgroundColor = new Color("1c1c1c")
 	
 	let titleText = widget.addText(selection.title)
-	titleText.font = Font.boldSystemFont(12)
+	titleText.font = Font.thinSystemFont(12)
 	titleText.textColor = Color.white()
 	titleText.leftAlignText()
+	
+	let interval = 1000 * 60 * 60 * refreshInterval
+	widget.refreshAfterDate = new Date(Date.now() + interval)
 	
     return widget
 }
