@@ -1,6 +1,13 @@
-//Insert your Flickr API key here
+///////////////////////////////////////////////////////////////////////
+// As an alternative to entering the api key and your username here  //
+// you can also pass them into the widget as a widget parameter by   //
+// using "Edit Widget" of the home screen.                           //
+// Put paramters as follows: USERNMAE;API_KEY                        //
+///////////////////////////////////////////////////////////////////////
+
+// Insert your Flickr API key
 const apiKey = ''
-// Insert the username of the user you want to load pictures from here
+// Insert the username of the user you want to load pictures from
 const username = ''
 // Refresh interval in hours
 const refreshInterval = 6
@@ -11,13 +18,13 @@ const showImageTitle = true
 
 
 // URL prototype to use for loading a list of photos from the photoset with given ID
-const getPhotosUrl = (photosetId, userId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1`
+const getPhotosUrl = (key, photosetId, userId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${key}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1`
 // URL prototype to use for loading the list of available photosets
-const getPhotosetsUrl = (userId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=${apiKey}&user_id=${userId}&format=json&nojsoncallback=1`
+const getPhotosetsUrl = (key, userId) => `https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=${key}&user_id=${userId}&format=json&nojsoncallback=1`
 // URL prototype to use for loading the image
 const imgUrlPrototype = (server, id, secret, size) => `https://live.staticflickr.com/${server}/${id}_${secret}_${size}.jpg`
 // URL prototype to use translate the given username into the user's flickr-ID needed in order to loaded pictures and photosets
-const findByUsernameUrl = `https://www.flickr.com/services/rest/?method=flickr.people.findByUsername&api_key=${apiKey}&username=${username}&format=json&nojsoncallback=1`
+const findByUsernameUrl = (key, user) => `https://www.flickr.com/services/rest/?method=flickr.people.findByUsername&api_key=${key}&username=${user}&format=json&nojsoncallback=1`
 
 
 const widget = await createWidget()
@@ -93,7 +100,7 @@ async function getRandomPic()
 		const photosetId = await getPhotosetId(userId)
 		if(photosetId)
 		{
-			let data = await new Request(getPhotosUrl(photosetId, userId)).loadJSON()
+			let data = await new Request(getPhotosUrl(getApiKey(), photosetId, userId)).loadJSON()
 			if(data)
 			{
 				let photos = data.photoset.photo
@@ -105,10 +112,10 @@ async function getRandomPic()
 				let img = await imgRequest.loadImage()
 				return {image: img, title: pic['title']}
 			}
-			console.log(`Could not get a valid photo ID to load a photo from!`)
+			console.log("Could not get a valid photo ID to load a photo from!")
 			return null
 		}
-		console.log(`Could not get a valid photoset ID to chose a picture from!`)
+		console.log("Could not get a valid photoset ID to chose a picture from!")
 		return null
 	}
 	catch (e)
@@ -134,8 +141,7 @@ async function getPhotosetId(userId)
 {
 	try
 	{
-		let photosetsURL = await getPhotosetsUrl(userId)
-		let data = await new Request(photosetsURL).loadJSON()
+		let data = await new Request(getPhotosetsUrl(getApiKey(), userId)).loadJSON()
 		let photosets = data.photosets.photoset
 		let num = Math.floor((Math.random() * (photosets.length - 1)));
 		let set = photosets[num]
@@ -158,7 +164,7 @@ async function getUserId()
 {
 	try
 	{
-		let data = await new Request(findByUsernameUrl).loadJSON()
+		let data = await new Request(findByUsernameUrl(getApiKey(), getUsername())).loadJSON()
 		let id = data.user.id
 		let idStr = encodeURIComponent(id)
 		console.log(`Resolved user-ID: ${idStr}`)
@@ -167,6 +173,54 @@ async function getUserId()
 	catch(e)
 	{
 		console.error(`getUserId: ${e}`)
+		return null
+	}
+}
+
+/*
+ * Gets the API key. Either by retrieving a configured paramter or by 
+ * returning the configured API key constant at the top.
+ * The parameter may contain username and API key separated by ';'
+ */
+function getApiKey()
+{
+	try
+	{
+		if(args.widgetParameter)
+		{
+			let params = args.widgetParameter.split(';')
+			return params[1].trim()
+		}
+		
+		return apiKey
+	}
+	catch(e)
+	{
+		console.error(`getApiKey: ${e}`)
+		return null
+	}
+}
+
+/*
+ * Gets the username. Either by retrieving a configured paramter of by
+ * returning the configured unsername constant at the top.
+ * The paramter may contain username and API key separated by ';'
+ */
+function getUsername()
+{
+	try
+	{
+		if(args.widgetParameter)
+		{
+			let params = args.widgetParameter.split(';')
+			return params[0].trim()
+		}
+		
+		return username
+	}
+	catch(e)
+	{
+		console.error(`getUsername: ${e}`)
 		return null
 	}
 }
