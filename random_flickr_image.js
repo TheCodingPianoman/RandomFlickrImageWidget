@@ -13,7 +13,7 @@ const username = ''
 const refreshInterval = 6
 // Imagesize suffix. Find a list of valid suffixes: https://www.flickr.com/services/api/misc.urls.html
 const sizeIndicator = 'b'
-// Set true, if the image title should be shown at the bottom of the widget
+// Set true, if the image title should be shown at the bottom of the widget; otherwise false.
 const showImageTitle = true
 
 
