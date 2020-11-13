@@ -16,7 +16,7 @@ Setting up the mandatory parameters can be achieved in two way:
 1. Write your username and API key into the widget's parameter field. 
 To do so, press and hold your finger upon the widget until the context menu comes up. Select "Edit Widget." In the appearing settings screen enter your username and API key separated by a semicolon.
 2. Edit the Script itself. 
-To do so, open scriptable and open the source code using the three dotted button. Into line where you find the text `const apiKey` paste your Flickr API key between the two apostrophe characters. Make sure NOT to delete the apostophes! Into the line where you find the text `const username` enter your Flickr username between the two apostrophe characters. Make sure NOT to delete the apostrophes!
+To do so, open scriptable and open the source code using the three dotted button. Into the line where you find the text `const apiKey` paste your Flickr API key between the two apostrophe characters. Make sure NOT to delete the apostophes! Into the line where you find the text `const username` enter your Flickr username between the two apostrophe characters. Make sure NOT to delete the apostrophes!
 
 ### What you can configure optionally
 As optional settings you will be able to configure:
