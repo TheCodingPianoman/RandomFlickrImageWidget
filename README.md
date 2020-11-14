@@ -23,3 +23,6 @@ As optional settings you will be able to configure:
 * the interval in which a new image will be pull out of the albums of your account
 * the target resolution you would like your images to be loaded with. Hint: in order to save cellular data consumption, you may reduce the indicator. But by reducing the images will look way less sharp. 
 * Whether or not to present the titles of the images that are pulled from an album. In some cases you do not want so see that IMG_123.jpg is currently presentd if you did not fill in reasonable titles to your images when uploading. 
+
+## How to contribute
+If you would like to contribute to this project, feel free to add issues with feature requests or bugs you found. I will review and consider including ideas with one of the next milestones. If you would like to actively contributing to this project, feel free to send me pull requests with ideas or bug fixes. If you fixed a bug mentioned under issues, please refer to the issue ID in your commit, so I can keep track of issues you want to contribute to. 
